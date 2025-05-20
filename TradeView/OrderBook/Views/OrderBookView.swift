@@ -13,16 +13,33 @@ struct OrderBookView: View {
 
     var body: some View {
         ScrollView {
-            HStack(alignment: .top, spacing: 8) {
-                LazyVStack(spacing: 0) {
-                    ForEach(viewModel.buyRows) { order in
-                        BuyOrderRow(order: order)
+            VStack {
+                HStack {
+                    Group {
+                        Text("Qty")
+                        Spacer()
+                        Text("Price (USD)")
+                        Spacer()
+                        Text("Qty")
                     }
+                    .font(.callout)
+                    .foregroundStyle(.gray)
+                    .padding([.leading, .trailing], 16)
                 }
+
+                Divider()
                 
-                LazyVStack(spacing: 0) {
-                    ForEach(viewModel.sellRows) { order in
-                        SellOrderRow(order: order)
+                HStack(alignment: .top, spacing: 8) {
+                    LazyVStack(spacing: 0) {
+                        ForEach(viewModel.buyRows) { order in
+                            BuyOrderRow(order: order)
+                        }
+                    }
+                    
+                    LazyVStack(spacing: 0) {
+                        ForEach(viewModel.sellRows) { order in
+                            SellOrderRow(order: order)
+                        }
                     }
                 }
             }

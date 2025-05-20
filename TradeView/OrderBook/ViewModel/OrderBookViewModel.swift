@@ -7,18 +7,6 @@
 
 import SwiftUI
 
-//final class OrderBookViewModel: ObservableObject {
-//    @Published var buyOrders = (1...20).map { Order(price: Double(100 - $0), size: Double.random(in: 1...100)) }
-//    @Published var sellOrders = (1...20).map { Order(price: Double(100 + $0), size: Double.random(in: 1...100)) }
-////    var volumeWidth: CGFloat {
-////        CGFloat(order.size / maxSize)
-////    }
-//    
-////    @Published var maxSize: Double {
-////        max((buyOrders + sellOrders).map { $0.size }.max() ?? 1, 1)
-////    }
-//}
-
 @MainActor
 final class OrderBookViewModel: ObservableObject {
     @Published var buyRows: [OrderBookRowViewModel] = []

@@ -29,21 +29,6 @@ struct TradingDashboardView: View {
                 }
             }
             
-            HStack {
-                Group {
-                    Text("Qty")
-                    Spacer()
-                    Text("Price (USD)")
-                    Spacer()
-                    Text("Qty")
-                }
-                .font(.callout)
-                .foregroundStyle(.gray)
-                .padding([.leading, .trailing], 18)
-            }
-
-            Divider()
-
             switch viewModel.selectedTab {
             case .chart:
                 Text("Charts")
