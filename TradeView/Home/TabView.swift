@@ -1,0 +1,34 @@
+//
+//  TabView.swift
+//  TradeView
+//
+//  Created by Samruddhi Jadhav on 20/5/25.
+//
+
+import SwiftUI
+
+struct TabView: View {
+    
+    @Binding var selectedTab: TabType
+    let currentTab: TabType
+
+    var body: some View {
+        VStack {
+            Button {
+                selectedTab = currentTab
+            } label: {
+                Text(currentTab.rawValue)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(selectedTab == currentTab ? .black : .gray)
+            }
+            Rectangle()
+                .fill(selectedTab == currentTab ? .blue : .gray.opacity(0.2))
+                .frame(height: 2)
+            
+        }
+    }
+}
+
+#Preview {
+    TabView(selectedTab: .constant(.orderBook), currentTab: .orderBook)
+}
