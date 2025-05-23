@@ -13,25 +13,27 @@ struct SellOrderRow: View {
     var body: some View {
         HStack {
             Text(order.displayPrice)
-                .fontWeight(.semibold)
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.red)
+                .lineLimit(1)
             
             Spacer()
             
             Text(order.displaySize)
-                .fontWeight(.semibold)
+                .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.primary)
+                .lineLimit(1)
         }
-        .padding(16)
+        .padding([.top, .bottom, .trailing], 16)
         
 //        ZStack(alignment: .trailing) {
 //            GeometryReader { geometry in
 //                Rectangle()
-//                    .fill(isBuy ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
-//                    .frame(width: geometry.size.width * volumeWidth)
+//                    .fill(.red.opacity(0.1))
+//                    .frame(width: geometry.size.width * CGFloat(order.accumulatedSize))
 //            }
 //            
-//            
+//            //Color.green.opacity(0.1)
 //        }
 //        .frame(height: 28)
 //        .background(Color.white)
@@ -39,5 +41,5 @@ struct SellOrderRow: View {
 }
 
 #Preview {
-    SellOrderRow(order: OrderBookRowPresentationModel(from: OrderBookEntry(id: 1234, side: .sell, price: 123.0)))
+    SellOrderRow(order: OrderBookRowPresentationModel(from: OrderBookEntry(id: 1234, side: .sell, price: 123.0), accumulatedSize: 20))
 }

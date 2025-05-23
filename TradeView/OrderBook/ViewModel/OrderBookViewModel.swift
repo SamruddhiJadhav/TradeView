@@ -30,13 +30,6 @@ final class OrderBookViewModel: ObservableObject {
             """
             
             try? await socketService.send(subscribeMessage)
-            
-//            try? await socketService.send("""
-//            {
-//              \"op\": \"subscribe\",
-//              \"args\": [\"orderBookL2:XBTUSD\"]
-//            }
-//            """)
 
             let stream = await socketService.messageStream()
             for try await message in stream {
@@ -71,21 +64,37 @@ final class OrderBookViewModel: ObservableObject {
                 // Data source builder??
                 // Buy Orders (Descending)
                 // Need to fix recent 20 trades
-                buyRows = orderBookDict.values
+                var accumulatedBuySize = 0
+                var maxSize = 0
+                let buyRows2 = orderBookDict.values
                     .filter { $0.side == .buy }
                     .sorted { $0.price > $1.price }
                     .prefix(20)
                     .map {
-                        OrderBookRowPresentationModel(from: $0)
+                        maxSize += $0.size ?? 0
+                        return $0
                 }
+                buyRows = buyRows2.map {
+                    accumulatedBuySize += $0.size ?? 0
+                    return OrderBookRowPresentationModel(from: $0, accumulatedSize: accumulatedBuySize / maxSize)
+                }
+                
 
                 // Sell Orders (Ascending)
-                sellRows = orderBookDict.values
+                var accumulatedSellSize = 0
+                maxSize = 0
+                let sellRows2 = orderBookDict.values
                     .filter { $0.side == .sell }
                     .sorted { $0.price < $1.price }
                     .prefix(20)
                     .map {
-                        OrderBookRowPresentationModel(from: $0)
+                        maxSize += $0.size ?? 0
+                        return $0
+                }
+                
+                sellRows = sellRows2.map {
+                    accumulatedSellSize += $0.size ?? 0
+                    return OrderBookRowPresentationModel(from: $0, accumulatedSize: accumulatedSellSize)
                 }
             }
         }

@@ -19,7 +19,7 @@ struct TabView: View {
             } label: {
                 Text(currentTab.rawValue)
                     .fontWeight(.semibold)
-                    .foregroundStyle(selectedTab == currentTab ? .black : .gray)
+                    .foregroundStyle(selectedTab == currentTab ? .black.opacity(0.6) : .gray)
             }
             Rectangle()
                 .fill(selectedTab == currentTab ? .blue : .gray.opacity(0.2))

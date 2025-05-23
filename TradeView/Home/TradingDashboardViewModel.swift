@@ -8,5 +8,5 @@
 import SwiftUI
 
 final class TradingDashboardViewModel: ObservableObject {
-    @Published var selectedTab: TabType = .recentTrades
+    @Published var selectedTab: TabType = .orderBook
 }

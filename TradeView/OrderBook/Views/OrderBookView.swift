@@ -17,10 +17,11 @@ struct OrderBookView: View {
                 HStack {
                     Group {
                         Text("Qty")
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         Text("Price (USD)")
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .center)
                         Text("Qty")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)
                     .foregroundStyle(.gray)
@@ -29,7 +30,7 @@ struct OrderBookView: View {
 
                 Divider()
                 
-                HStack(alignment: .top, spacing: 8) {
+                HStack(alignment: .top) {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.buyRows) { order in
                             BuyOrderRow(order: order)

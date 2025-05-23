@@ -5,10 +5,18 @@
 //  Created by Samruddhi Jadhav on 23/5/25.
 //
 
-import Foundation
+import SwiftUI
 
 enum TradeSide: String, Codable {
     case buy = "Buy"
     case sell = "Sell"
-    case none
+    
+    var color: Color {
+        switch self {
+        case .buy:
+            return .green
+        case .sell:
+            return .red
+        }
+    }
 }

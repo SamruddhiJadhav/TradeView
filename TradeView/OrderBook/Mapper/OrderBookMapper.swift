@@ -19,7 +19,7 @@ enum OrderBookMapper {
         do {
             return try JSONDecoder().decode(OrderBookUpdate.self, from: data)
         } catch {
-            print("❌ JSON Decoding Error: \(error)")
+            print("❌ JSON Decoding Error: \(error)") // Logger
             return nil
         }
     }

@@ -14,10 +14,10 @@ struct RecentTradeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("Recent Trade")
+                Text("Recent Trades")
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.black.opacity(0.6))
                     .padding(16)
                 
                 Divider()
@@ -25,10 +25,11 @@ struct RecentTradeView: View {
                 HStack {
                     Group {
                         Text("Price (USD)")
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         Text("Qty")
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .center)
                         Text("Time")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)
                     .foregroundStyle(.gray)
@@ -45,9 +46,6 @@ struct RecentTradeView: View {
             }
             .onAppear {
                 viewModel.connectSocket()
-            }
-            .onDisappear {
-                viewModel.disconnectSocket()
             }
         }
     }

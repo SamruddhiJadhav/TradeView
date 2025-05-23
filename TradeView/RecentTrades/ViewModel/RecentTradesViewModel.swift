@@ -8,6 +8,7 @@
 import SwiftUI
 
 final class RecentTradesViewModel: ObservableObject {
+
     private let socketService = WebSocketManager()
     @Published var recentTrades = [RecentTradePresentationModel]()
     
@@ -38,18 +39,20 @@ final class RecentTradesViewModel: ObservableObject {
                         side: entry.side
                     )
                 }
-                
-//                let sortedLimitedTrades = await Self.processTrades(newTrades + self.recentTrades)
-//
-//                await MainActor.run {
-//                    self.recentTrades = sortedLimitedTrades
-//                }
-                
+
                 await MainActor.run {
                     let combined = (newTrades + self.recentTrades)
                         .sorted(by: { $0.timestamp > $1.timestamp })
                         .prefix(30)
                     self.recentTrades = Array(combined)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
+                    for i in recentTrades.indices {
+                        if self.recentTrades[i].isHighlighted {
+                            self.recentTrades[i].isHighlighted = false
+                        }
+                    }
                 }
             }
         }
@@ -65,12 +68,5 @@ final class RecentTradesViewModel: ObservableObject {
                 continuation.resume(returning: Array(result))
             }
         }
-    }
-
-    func disconnectSocket() {
-//        Task {
-//            await socketService.disconnect()
-//            recentTrades = []
-//        }
     }
 }

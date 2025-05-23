@@ -11,7 +11,8 @@ struct RecentTradePresentationModel: Identifiable {
     let price: Double
     let timestamp: String
     let quantity: Double
-    let side: TradeSide // enum
+    let side: TradeSide
+    var isHighlighted: Bool = false
     
     init(id: String, price: Double, timestamp: String, quantity: Double, side: TradeSide) {
         self.price = price
@@ -22,3 +23,11 @@ struct RecentTradePresentationModel: Identifiable {
     }
 }
 
+extension RecentTradePresentationModel {
+    var formattedTime: String {
+        guard let date = TradeDateFormatter.isoFormatter.date(from: timestamp) else {
+            return "Invalid"
+        }
+        return TradeDateFormatter.timeFormatter24Hr.string(from: date)
+    }
+}

@@ -24,7 +24,7 @@ struct TradingDashboardView: View {
     var body: some View {
         VStack {
             HStack(spacing: 0) {
-                ForEach(TabType.allCases, id: \.self) { tab in
+                ForEach(TabType.allCases) { tab in
                     TabView(selectedTab: $viewModel.selectedTab, currentTab: tab)
                 }
             }
