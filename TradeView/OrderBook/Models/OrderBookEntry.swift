@@ -9,9 +9,7 @@ import Foundation
 
 struct OrderBookEntry: Codable, Identifiable {
     let id: UInt64
-    let side: String
+    let side: TradeSide
     var size: Int?
     let price: Double
-
-    var identifier: String { "\(side)-\(price)" }
 }

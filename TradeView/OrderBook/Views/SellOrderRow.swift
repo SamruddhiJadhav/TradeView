@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SellOrderRow: View {
-    let order: OrderBookRowViewModel
+    let order: OrderBookRowPresentationModel
     
     var body: some View {
         HStack {
@@ -39,5 +39,5 @@ struct SellOrderRow: View {
 }
 
 #Preview {
-    SellOrderRow(order: OrderBookRowViewModel(from: OrderBookEntry(id: 1234, side: "Sell", price: 123.0)))
+    SellOrderRow(order: OrderBookRowPresentationModel(from: OrderBookEntry(id: 1234, side: .sell, price: 123.0)))
 }

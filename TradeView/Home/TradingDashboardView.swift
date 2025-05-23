@@ -31,11 +31,11 @@ struct TradingDashboardView: View {
             
             switch viewModel.selectedTab {
             case .chart:
-                Text("Charts")
+                ChartView()
             case .orderBook:
                 OrderBookView()
             case .recentTrades:
-                Text("recentTrades")
+                RecentTradeView()
             }
         }
     }

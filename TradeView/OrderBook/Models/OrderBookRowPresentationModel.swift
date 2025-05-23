@@ -1,5 +1,5 @@
 //
-//  OrderBookRowViewModel.swift
+//  OrderBookRowPresentationModel.swift
 //  TradeView
 //
 //  Created by Samruddhi Jadhav on 20/5/25.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct OrderBookRowViewModel: Identifiable {
+struct OrderBookRowPresentationModel: Identifiable {
     let id: UInt64
-    let side: String
+    let side: TradeSide
     let displaySize: String
     let displayPrice: String
     //    var accumulatedSize: Double = 0

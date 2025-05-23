@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-@MainActor
+@MainActor // should whole class be mainActor or only dispatch
 final class OrderBookViewModel: ObservableObject {
-    @Published var buyRows: [OrderBookRowViewModel] = []
-    @Published var sellRows: [OrderBookRowViewModel] = []
+    @Published var buyRows: [OrderBookRowPresentationModel] = []
+    @Published var sellRows: [OrderBookRowPresentationModel] = []
 
-    private var orderBookDict: [UInt64: OrderBookEntry] = [:]
+    private var orderBookDict: [UInt64: OrderBookEntry] = [:] // eviction policy
     private let socketService = WebSocketManager()
 
 //    init(socketService: WebSocketService) {
@@ -68,23 +68,25 @@ final class OrderBookViewModel: ObservableObject {
                     break
                 }
 
+                // Data source builder??
                 // Buy Orders (Descending)
+                // Need to fix recent 20 trades
                 buyRows = orderBookDict.values
-                    .filter { $0.side == "Buy" }
+                    .filter { $0.side == .buy }
                     .sorted { $0.price > $1.price }
                     .prefix(20)
                     .map {
-                        OrderBookRowViewModel(from: $0)
-                    }
+                        OrderBookRowPresentationModel(from: $0)
+                }
 
                 // Sell Orders (Ascending)
                 sellRows = orderBookDict.values
-                    .filter { $0.side == "Sell" }
+                    .filter { $0.side == .sell }
                     .sorted { $0.price < $1.price }
                     .prefix(20)
                     .map {
-                        OrderBookRowViewModel(from: $0)
-                    }
+                        OrderBookRowPresentationModel(from: $0)
+                }
             }
         }
     }
