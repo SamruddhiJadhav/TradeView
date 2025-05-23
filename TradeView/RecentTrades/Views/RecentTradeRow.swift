@@ -28,7 +28,7 @@ struct RecentTradeRow: View {
         }
         .padding(16)
         .background {
-            Color.green.opacity(0.1)
+            recentTrade.side.color.opacity(0.1)
         }
         .animation(.easeInOut(duration: 0.2), value: recentTrade.isHighlighted)
     }

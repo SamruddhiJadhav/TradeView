@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 final class RecentTradesViewModel: ObservableObject {
 
     private let socketService = WebSocketManager()
@@ -30,8 +31,7 @@ final class RecentTradesViewModel: ObservableObject {
                 guard let update = RecentTradeMapper.map(from: message) else { continue }
                 
                 let newTrades = update.data.map { entry in
-                    print(entry)
-                    return RecentTradePresentationModel(
+                    RecentTradePresentationModel(
                         id: entry.trdMatchID,
                         price: entry.price,
                         timestamp: entry.timestamp,
@@ -40,20 +40,10 @@ final class RecentTradesViewModel: ObservableObject {
                     )
                 }
 
-                await MainActor.run {
-                    let combined = (newTrades + self.recentTrades)
-                        .sorted(by: { $0.timestamp > $1.timestamp })
-                        .prefix(30)
-                    self.recentTrades = Array(combined)
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
-                    for i in recentTrades.indices {
-                        if self.recentTrades[i].isHighlighted {
-                            self.recentTrades[i].isHighlighted = false
-                        }
-                    }
-                }
+                let combined = (newTrades + self.recentTrades)
+                    .sorted(by: { $0.timestamp > $1.timestamp })
+                    .prefix(30)
+                self.recentTrades = Array(combined)
             }
         }
     }

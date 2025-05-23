@@ -76,7 +76,7 @@ final class OrderBookViewModel: ObservableObject {
                 }
                 buyRows = buyRows2.map {
                     accumulatedBuySize += $0.size ?? 0
-                    return OrderBookRowPresentationModel(from: $0, accumulatedSize: accumulatedBuySize / maxSize)
+                    return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedBuySize) / Double(maxSize))
                 }
                 
 
@@ -91,10 +91,9 @@ final class OrderBookViewModel: ObservableObject {
                         maxSize += $0.size ?? 0
                         return $0
                 }
-                
                 sellRows = sellRows2.map {
                     accumulatedSellSize += $0.size ?? 0
-                    return OrderBookRowPresentationModel(from: $0, accumulatedSize: accumulatedSellSize)
+                    return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedSellSize) / Double(maxSize))
                 }
             }
         }

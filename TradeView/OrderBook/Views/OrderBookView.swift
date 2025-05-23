@@ -30,7 +30,7 @@ struct OrderBookView: View {
 
                 Divider()
                 
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0) {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.buyRows) { order in
                             BuyOrderRow(order: order)

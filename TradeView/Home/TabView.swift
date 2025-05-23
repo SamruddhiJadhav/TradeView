@@ -22,7 +22,7 @@ struct TabView: View {
                     .foregroundStyle(selectedTab == currentTab ? .black.opacity(0.6) : .gray)
             }
             Rectangle()
-                .fill(selectedTab == currentTab ? .blue : .gray.opacity(0.2))
+                .fill(selectedTab == currentTab ? .green : .gray.opacity(0.2))
                 .frame(height: 2)
             
         }
