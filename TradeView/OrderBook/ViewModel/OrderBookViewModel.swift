@@ -7,7 +7,12 @@
 
 import SwiftUI
 
-@MainActor // should whole class be mainActor or only dispatch
+//    init(socketService: WebSocketService) {
+//        self.socketService = socketService
+//    }
+// should whole class be mainActor or only dispatch
+
+@MainActor
 final class OrderBookViewModel: ObservableObject {
     @Published var buyRows: [OrderBookRowPresentationModel] = []
     @Published var sellRows: [OrderBookRowPresentationModel] = []
@@ -15,83 +20,77 @@ final class OrderBookViewModel: ObservableObject {
     private var orderBookDict: [UInt64: OrderBookEntry] = [:] // eviction policy
     private let socketService = WebSocketManager()
 
-//    init(socketService: WebSocketService) {
-//        self.socketService = socketService
-//    }
-
     func start() {
         Task {
-            await socketService.connect()
-            let subscribeMessage = """
-            {
-              "op": "subscribe",
-              "args": ["orderBookL2:XBTUSD"]
-            }
-            """
+            await connectSocket()
+            try? await subscribeToOrderBook()
+            try? await listenForMessages()
+        }
+    }
+}
+
+private extension OrderBookViewModel {
+    func connectSocket() async {
+        await socketService.connect()
+    }
+    
+    func subscribeToOrderBook() async throws {
+        try? await socketService.send(SocketMessages.orderBookSubscribe)
+    }
+    
+    func listenForMessages() async throws {
+        let stream = await socketService.messageStream()
+        for try await message in stream {
+            guard let update = OrderBookMapper.map(from: message) else { continue }
+        
+            applyOrderBookUpdate(update)
             
-            try? await socketService.send(subscribeMessage)
-
-            let stream = await socketService.messageStream()
-            for try await message in stream {
-                guard let update = OrderBookMapper.map(from: message) else { continue }
-
-                switch update.action {
-                case "partial":
-                    orderBookDict = Dictionary(uniqueKeysWithValues: update.data.map { ($0.id, $0) })
-
-                case "insert":
-                    for entry in update.data {
-                        orderBookDict[entry.id] = entry
-                    }
-
-                case "update":
-                    for entry in update.data {
-                        if var existing = orderBookDict[entry.id] {
-                            existing.size = entry.size
-                            orderBookDict[entry.id] = existing
-                        }
-                    }
-
-                case "delete":
-                    for entry in update.data {
-                        orderBookDict.removeValue(forKey: entry.id)
-                    }
-
-                default:
-                    break
-                }
-
-                // Data source builder??
-                var accumulatedBuySize = 0
-                var maxSize = 0
-                let buyRows2 = orderBookDict.values
-                    .filter { $0.side == .buy }
-                    .sorted { $0.price > $1.price }
-                    .prefix(20)
-                    .map {
-                        maxSize += $0.size
-                        return $0
-                }
-                buyRows = buyRows2.map {
-                    accumulatedBuySize += $0.size
-                    return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedBuySize) / Double(maxSize))
-                }
-                
-                var accumulatedSellSize = 0
-                maxSize = 0
-                let sellRows2 = orderBookDict.values
-                    .filter { $0.side == .sell }
-                    .sorted { $0.price < $1.price }
-                    .prefix(20)
-                    .map {
-                        maxSize += $0.size
-                        return $0
-                }
-                sellRows = sellRows2.map {
-                    accumulatedSellSize += $0.size
-                    return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedSellSize) / Double(maxSize))
+            buyRows = buildPresentationModel(for: .buy)
+            sellRows = buildPresentationModel(for: .sell)
+        }
+    }
+    
+    func applyOrderBookUpdate(_ update: OrderBookUpdate) {
+        switch update.action {
+        case .partial:
+            orderBookDict = Dictionary(uniqueKeysWithValues: update.data.map { ($0.id, $0) })
+            
+        case .insert:
+            for entry in update.data {
+                orderBookDict[entry.id] = entry
+            }
+            
+        case .update:
+            for entry in update.data {
+                if var existing = orderBookDict[entry.id] {
+                    existing.size = entry.size
+                    orderBookDict[entry.id] = existing
                 }
             }
+            
+        case .delete:
+            for entry in update.data {
+                orderBookDict.removeValue(forKey: entry.id)
+            }
+        }
+    }
+
+    func buildPresentationModel(for tradeSide: TradeSide) -> [OrderBookRowPresentationModel] {
+        var accumulatedSize = 0
+        var maxSize = 0
+
+        let sortedEntries = orderBookDict.values
+            .filter { $0.side == tradeSide }
+            .sorted { tradeSide == .buy ? $0.price > $1.price : $0.price < $1.price }
+            .prefix(20)
+        
+        sortedEntries.forEach { entry in
+            maxSize += entry.size
+        }
+
+        return sortedEntries.map {
+            accumulatedSize += $0.size
+            return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedSize) / Double(maxSize))
         }
     }
 }

@@ -15,8 +15,6 @@ enum TabType: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-
-
 struct TradingDashboardView: View {
 
     @StateObject var viewModel = TradingDashboardViewModel()

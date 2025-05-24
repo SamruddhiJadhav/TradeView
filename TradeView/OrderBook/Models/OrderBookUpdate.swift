@@ -7,7 +7,14 @@
 
 import Foundation
 
-struct OrderBookUpdate: Codable {
-    let action: String
+struct OrderBookUpdate: Decodable {
+    let action: TradeAction
     let data: [OrderBookEntry]
+}
+
+enum TradeAction: String, Decodable {
+    case partial
+    case insert
+    case delete
+    case update
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderBookEntry: Codable, Identifiable {
+struct OrderBookEntry: Decodable, Identifiable {
     let id: UInt64
     let side: TradeSide
     var size: Int

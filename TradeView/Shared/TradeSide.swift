@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum TradeSide: String, Codable {
+enum TradeSide: String, Decodable {
     case buy = "Buy"
     case sell = "Sell"
 }

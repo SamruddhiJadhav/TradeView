@@ -17,14 +17,8 @@ final class RecentTradesViewModel: ObservableObject {
     func connectSocket() {
         Task {
             await socketService.connect()
-            let subscribeMessage = """
-            {
-              "op": "subscribe",
-              "args": ["trade:XBTUSD"]
-            }
-            """
-            
-            try? await socketService.send(subscribeMessage)
+
+            try? await socketService.send(SocketMessages.recentTradeSubscribe)
 
             let stream = await socketService.messageStream()
             for try await message in stream {
