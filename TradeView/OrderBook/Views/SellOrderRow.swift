@@ -14,13 +14,13 @@ struct SellOrderRow: View {
         HStack(spacing: 0) {
             ZStack(alignment: .trailing) {
                 GeometryReader { geometry in
-                    order.side.color.opacity(0.1)
+                    Theme.Colors.backgroundRed
                         .frame(width: geometry.size.width * CGFloat(order.accumulatedSizeRatio))
                 }
 
                 Text(order.displayPrice)
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.red)
+                    .foregroundColor(Theme.Colors.red)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(16)
@@ -29,7 +29,7 @@ struct SellOrderRow: View {
             
             Text(order.displaySize)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.primary)
+                .foregroundColor(Theme.Colors.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(16)

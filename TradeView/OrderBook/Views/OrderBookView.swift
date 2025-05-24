@@ -24,7 +24,7 @@ struct OrderBookView: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(Theme.Colors.gray)
                     .padding([.leading, .trailing], 16)
                 }
 

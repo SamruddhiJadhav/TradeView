@@ -17,7 +17,7 @@ struct RecentTradeView: View {
                 Text("Recent Trades")
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.black.opacity(0.6))
+                    .foregroundStyle(Theme.Colors.textSecondary)
                     .padding(16)
                 
                 Divider()
@@ -32,7 +32,7 @@ struct RecentTradeView: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(Theme.Colors.gray)
                     .padding([.leading, .trailing], 16)
                 }
 

@@ -11,7 +11,7 @@ enum TradeDateFormatter {
     static let isoFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        formatter.timeZone = TimeZone(secondsFromGMT: 0) // because 'Z'
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter
     }()
 

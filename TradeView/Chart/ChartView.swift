@@ -9,9 +9,11 @@ import SwiftUI
 
 struct ChartView: View {
     var body: some View {
-        ScrollView {
-            Text("Charts")
-        }
+        Spacer()
+        Text("Charts not available right now!")
+            .font(.system(size: 16))
+            .foregroundStyle(Theme.Colors.textSecondary)
+        Spacer()
     }
 }
 

@@ -14,21 +14,21 @@ struct BuyOrderRow: View {
         HStack(spacing: 0) {
             Text(order.displaySize)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.primary)
+                .foregroundColor(Theme.Colors.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
 
             ZStack(alignment: .leading) {
                 GeometryReader { geometry in
-                    Color.green.opacity(0.1)
+                    Theme.Colors.backgroundGreen
                         .frame(width: geometry.size.width * CGFloat(order.accumulatedSizeRatio))
                 }
                 .scaleEffect(x: -1, y: 1)
 
                 Text(order.displayPrice)
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.green)
+                    .foregroundColor(Theme.Colors.green)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(16)

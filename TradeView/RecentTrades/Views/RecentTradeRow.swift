@@ -22,13 +22,13 @@ struct RecentTradeRow: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .font(.system(size: 14, weight: .semibold))
-            .foregroundStyle(recentTrade.side.color)
+            .foregroundStyle(recentTrade.side == .buy ? Theme.Colors.green : Theme.Colors.red)
             .lineLimit(1)
             
         }
         .padding(12)
         .background {
-            recentTrade.side.color.opacity(0.1)
+            recentTrade.side == .buy ? Theme.Colors.backgroundGreen : Theme.Colors.backgroundRed
         }
         .animation(.easeInOut(duration: 0.2), value: recentTrade.isHighlighted)
     }

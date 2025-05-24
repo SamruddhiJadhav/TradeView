@@ -19,10 +19,10 @@ struct TabView: View {
             } label: {
                 Text(currentTab.rawValue)
                     .fontWeight(.semibold)
-                    .foregroundStyle(selectedTab == currentTab ? .black.opacity(0.6) : .gray)
+                    .foregroundStyle(selectedTab == currentTab ? Theme.Colors.textSecondary : Theme.Colors.textTertiary)
             }
             Rectangle()
-                .fill(selectedTab == currentTab ? .green : .gray.opacity(0.2))
+                .fill(selectedTab == currentTab ? Theme.Colors.green : Theme.Colors.gray.opacity(0.2))
                 .frame(height: 2)
             
         }
