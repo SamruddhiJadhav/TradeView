@@ -26,7 +26,7 @@ struct RecentTradeRow: View {
             .lineLimit(1)
             
         }
-        .padding(16)
+        .padding(12)
         .background {
             recentTrade.side.color.opacity(0.1)
         }

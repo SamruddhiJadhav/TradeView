@@ -23,7 +23,7 @@ struct SellOrderRow: View {
                     .foregroundColor(.red)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(12)
+                    .padding(16)
             }
             .frame(maxWidth: .infinity)
             
@@ -32,7 +32,7 @@ struct SellOrderRow: View {
                 .foregroundColor(.primary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(12)
+                .padding(16)
         }
     }
 }

@@ -38,7 +38,7 @@ struct RecentTradeView: View {
 
                 Divider()
 
-                VStack {
+                VStack(spacing: 0) {
                     ForEach(viewModel.recentTrades) { recentTrade in
                         RecentTradeRow(recentTrade: recentTrade)
                     }

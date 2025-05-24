@@ -17,7 +17,7 @@ struct BuyOrderRow: View {
                 .foregroundColor(.primary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
+                .padding(16)
 
             ZStack(alignment: .leading) {
                 GeometryReader { geometry in
@@ -31,7 +31,7 @@ struct BuyOrderRow: View {
                     .foregroundColor(.green)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .padding(12)
+                    .padding(16)
             }
             .frame(maxWidth: .infinity)
         }
