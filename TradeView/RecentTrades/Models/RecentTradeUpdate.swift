@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecentTradeUpdate: Codable {
+struct RecentTradeUpdate: Decodable {
     let table: String
     let action: String
     let data: [RecentTradeEntry]

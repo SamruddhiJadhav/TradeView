@@ -40,5 +40,5 @@ struct BuyOrderRow: View {
 
 
 #Preview {
-    BuyOrderRow(order: OrderBookRowPresentationModel(from: OrderBookEntry(id: 1234, side: .buy, price: 123.0), accumulatedSizeRatio: 35))
+    BuyOrderRow(order: OrderBookRowPresentationModel(from: OrderBookEntry(id: 1234, side: .buy, size: 23, price: 123.0), accumulatedSizeRatio: 35))
 }

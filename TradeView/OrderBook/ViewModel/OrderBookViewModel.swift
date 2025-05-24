@@ -46,8 +46,8 @@ final class OrderBookViewModel: ObservableObject {
 
                 case "update":
                     for entry in update.data {
-                        if var existing = orderBookDict[entry.id], let newSize = entry.size {
-                            existing.size = newSize
+                        if var existing = orderBookDict[entry.id] {
+                            existing.size = entry.size
                             orderBookDict[entry.id] = existing
                         }
                     }
@@ -62,8 +62,6 @@ final class OrderBookViewModel: ObservableObject {
                 }
 
                 // Data source builder??
-                // Buy Orders (Descending)
-                // Need to fix recent 20 trades
                 var accumulatedBuySize = 0
                 var maxSize = 0
                 let buyRows2 = orderBookDict.values
@@ -71,16 +69,14 @@ final class OrderBookViewModel: ObservableObject {
                     .sorted { $0.price > $1.price }
                     .prefix(20)
                     .map {
-                        maxSize += $0.size ?? 0
+                        maxSize += $0.size
                         return $0
                 }
                 buyRows = buyRows2.map {
-                    accumulatedBuySize += $0.size ?? 0
+                    accumulatedBuySize += $0.size
                     return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedBuySize) / Double(maxSize))
                 }
                 
-
-                // Sell Orders (Ascending)
                 var accumulatedSellSize = 0
                 maxSize = 0
                 let sellRows2 = orderBookDict.values
@@ -88,11 +84,11 @@ final class OrderBookViewModel: ObservableObject {
                     .sorted { $0.price < $1.price }
                     .prefix(20)
                     .map {
-                        maxSize += $0.size ?? 0
+                        maxSize += $0.size
                         return $0
                 }
                 sellRows = sellRows2.map {
-                    accumulatedSellSize += $0.size ?? 0
+                    accumulatedSellSize += $0.size
                     return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedSellSize) / Double(maxSize))
                 }
             }

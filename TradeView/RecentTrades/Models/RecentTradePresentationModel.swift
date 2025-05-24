@@ -10,11 +10,11 @@ struct RecentTradePresentationModel: Identifiable {
     let id: String
     let price: Double
     let timestamp: String
-    let quantity: Double
+    let quantity: Int
     let side: TradeSide
     var isHighlighted: Bool = false
     
-    init(id: String, price: Double, timestamp: String, quantity: Double, side: TradeSide) {
+    init(id: String, price: Double, timestamp: String, quantity: Int, side: TradeSide) {
         self.price = price
         self.timestamp = timestamp
         self.quantity = quantity

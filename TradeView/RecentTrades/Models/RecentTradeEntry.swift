@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct RecentTradeEntry: Codable {
+struct RecentTradeEntry: Decodable {
     let timestamp: String
     let side: TradeSide
-    let size: Double
+    let size: Int
     let price: Double
     let trdMatchID: String
 }

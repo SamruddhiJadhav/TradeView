@@ -16,7 +16,7 @@ struct RecentTradeRow: View {
             Group {
                 Text("\(recentTrade.price, specifier: "%.1f")")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text("\(recentTrade.quantity, specifier: "%.4f")")
+                Text("\(recentTrade.quantity)")
                     .frame(maxWidth: .infinity, alignment: .center)
                 Text(recentTrade.formattedTime)
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -35,5 +35,5 @@ struct RecentTradeRow: View {
 }
 
 #Preview {
-    RecentTradeRow(recentTrade: RecentTradePresentationModel(id: "1", price: 12.9, timestamp: "2025-05-21T09:30:06.154Z", quantity: 23.56, side: .buy))
+    RecentTradeRow(recentTrade: RecentTradePresentationModel(id: "1", price: 12.9, timestamp: "2025-05-21T09:30:06.154Z", quantity: 23, side: .buy))
 }

@@ -17,7 +17,7 @@ struct OrderBookRowPresentationModel: Identifiable {
     init(from entry: OrderBookEntry, accumulatedSizeRatio: Double) {
         self.id = entry.id
         self.side = entry.side
-        self.displaySize = String(format: "%.4f", Double(entry.size ?? 0))
+        self.displaySize = String(entry.size)
         self.displayPrice = String(format: "%.1f", entry.price)
         self.accumulatedSizeRatio = accumulatedSizeRatio
     }
