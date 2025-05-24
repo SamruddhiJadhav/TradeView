@@ -45,7 +45,7 @@ struct RecentTradeView: View {
                 }
             }
             .onAppear {
-                viewModel.connectSocket()
+                viewModel.onAppear()
             }
         }
     }

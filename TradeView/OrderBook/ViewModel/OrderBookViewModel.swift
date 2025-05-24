@@ -15,7 +15,7 @@ final class OrderBookViewModel: ObservableObject {
     private var orderBookDict: [UInt64: OrderBookEntry] = [:]
     private let socketService = WebSocketManager()
 
-    func start() {
+    func onAppear() {
         Task {
             await connectSocket()
             try? await subscribeToOrderBook()
