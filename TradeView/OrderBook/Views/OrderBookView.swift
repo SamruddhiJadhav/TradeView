@@ -25,7 +25,7 @@ struct OrderBookView: View {
                     }
                     .font(.callout)
                     .foregroundStyle(.gray)
-                    .padding([.leading, .trailing], 16)
+                    .padding([.leading, .trailing], 12)
                 }
 
                 Divider()

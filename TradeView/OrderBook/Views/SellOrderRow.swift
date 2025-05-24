@@ -11,10 +11,10 @@ struct SellOrderRow: View {
     let order: OrderBookRowPresentationModel
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             ZStack(alignment: .trailing) {
                 GeometryReader { geometry in
-                    order.side.color.opacity(0.15)
+                    order.side.color.opacity(0.1)
                         .frame(width: geometry.size.width * CGFloat(order.accumulatedSizeRatio))
                 }
 
@@ -23,6 +23,7 @@ struct SellOrderRow: View {
                     .foregroundColor(.red)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
             }
             .frame(maxWidth: .infinity)
             
@@ -31,8 +32,8 @@ struct SellOrderRow: View {
                 .foregroundColor(.primary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(12)
         }
-        .padding([.trailing, .bottom, .top], 16)
     }
 }
 
