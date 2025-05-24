@@ -7,17 +7,12 @@
 
 import SwiftUI
 
-//    init(socketService: WebSocketService) {
-//        self.socketService = socketService
-//    }
-// should whole class be mainActor or only dispatch
-
 @MainActor
 final class OrderBookViewModel: ObservableObject {
     @Published var buyRows: [OrderBookRowPresentationModel] = []
     @Published var sellRows: [OrderBookRowPresentationModel] = []
 
-    private var orderBookDict: [UInt64: OrderBookEntry] = [:] // eviction policy
+    private var orderBookDict: [UInt64: OrderBookEntry] = [:]
     private let socketService = WebSocketManager()
 
     func start() {
@@ -90,7 +85,8 @@ private extension OrderBookViewModel {
 
         return sortedEntries.map {
             accumulatedSize += $0.size
-            return OrderBookRowPresentationModel(from: $0, accumulatedSizeRatio: Double(accumulatedSize) / Double(maxSize))
+            return OrderBookRowPresentationModel(from: $0,
+                                                 accumulatedSizeRatio: Double(accumulatedSize) / Double(maxSize))
         }
     }
 }

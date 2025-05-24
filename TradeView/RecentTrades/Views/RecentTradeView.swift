@@ -24,11 +24,11 @@ struct RecentTradeView: View {
                 
                 HStack {
                     Group {
-                        Text("Price (USD)")
+                        Text(TableColumnTypes.price.rawValue)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Qty")
+                        Text(TableColumnTypes.quantity.rawValue)
                             .frame(maxWidth: .infinity, alignment: .center)
-                        Text("Time")
+                        Text(TableColumnTypes.time.rawValue)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)

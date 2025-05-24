@@ -16,11 +16,11 @@ struct OrderBookView: View {
             VStack {
                 HStack {
                     Group {
-                        Text("Qty")
+                        Text(TableColumnTypes.quantity.rawValue)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Text("Price (USD)")
+                        Text(TableColumnTypes.price.rawValue)
                             .frame(maxWidth: .infinity, alignment: .center)
-                        Text("Qty")
+                        Text(TableColumnTypes.quantity.rawValue)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.callout)

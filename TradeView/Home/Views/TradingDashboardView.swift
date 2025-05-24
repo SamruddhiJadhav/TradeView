@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-enum TabType: String, CaseIterable, Identifiable {
-    case chart = "Chart"
-    case orderBook = "Order Book"
-    case recentTrades = "Recent Trades"
-
-    var id: String { rawValue }
-}
-
 struct TradingDashboardView: View {
 
     @StateObject var viewModel = TradingDashboardViewModel()
@@ -23,7 +15,8 @@ struct TradingDashboardView: View {
         VStack {
             HStack(spacing: 0) {
                 ForEach(TabType.allCases) { tab in
-                    TabView(selectedTab: $viewModel.selectedTab, currentTab: tab)
+                    TabView(selectedTab: $viewModel.selectedTab,
+                            currentTab: tab)
                 }
             }
             
@@ -38,7 +31,6 @@ struct TradingDashboardView: View {
         }
     }
 }
-
 
 #Preview {
     TradingDashboardView()
