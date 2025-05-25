@@ -13,20 +13,28 @@ final class RecentTradesViewModel: ObservableObject {
     @Published var recentTrades = [RecentTradePresentationModel]()
     
     private let socketService: WebSocketService
+    private var listenTask: Task<Void, Never>?
     
     init(socketService: WebSocketService) {
         self.socketService = socketService
     }
     
     func onAppear() {
-        Task {
+        listenTask = Task {
             await connectSocket()
-            try? await subscribeToOrderBook()
-            try? await listenForMessages()
+            try? await subscribeToRecentTrades()
+            await listenForMessages()
         }
     }
     
-    func onDisappear() {}
+    func onDisappear() {
+        listenTask?.cancel()
+        listenTask = nil
+
+        Task {
+            try? await unsubscribeFromRecentTrades()
+        }
+    }
 }
 
 private extension RecentTradesViewModel {
@@ -34,15 +42,23 @@ private extension RecentTradesViewModel {
         await socketService.connectIfNeeded()
     }
     
-    func subscribeToOrderBook() async throws {
-        try? await socketService.send(SocketMessages.recentTradeSubscribe)
+    func subscribeToRecentTrades() async throws {
+        try await socketService.send(SocketMessages.recentTradeSubscribe)
     }
-    
-    func listenForMessages() async throws {
+
+    func unsubscribeFromRecentTrades() async throws {
+        try await socketService.send(SocketMessages.recentTradeUnsubscribe)
+    }
+
+    func listenForMessages() async {
         let stream = await socketService.messageStream()
-        for try await message in stream {
-            guard let update = RecentTradeMapper.map(from: message) else { continue }
-            updateRecentTrades(update: update)
+        do {
+            for try await message in stream {
+                guard let update = RecentTradeMapper.map(from: message) else { continue }
+                updateRecentTrades(update: update)
+            }
+        } catch {
+            AppLogger.socket.error("Error while listening to recent trades: \(error)")
         }
     }
 
@@ -61,7 +77,7 @@ private extension RecentTradesViewModel {
         let combined = (newTrades + self.recentTrades)
             .sorted(by: { $0.timestamp > $1.timestamp })
             .prefix(30)
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
             self.recentTrades = self.recentTrades.map {
                 var model = $0
@@ -73,3 +89,4 @@ private extension RecentTradesViewModel {
         self.recentTrades = Array(combined)
     }
 }
+

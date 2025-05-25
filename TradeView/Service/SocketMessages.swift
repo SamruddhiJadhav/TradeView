@@ -21,4 +21,18 @@ enum SocketMessages {
       "args": ["trade:XBTUSD"]
     }
     """
+    
+    static let recentTradeUnsubscribe = """
+    {
+        "op": "unsubscribe",
+        "args": ["trade:XBTUSD"]
+    }
+    """
+
+    static let orderBookUnsubscribe = """
+    {
+      "op": "unsubscribe",
+      "args": ["orderBookL2:XBTUSD"]
+    }
+    """
 }

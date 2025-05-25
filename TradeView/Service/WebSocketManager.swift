@@ -11,7 +11,7 @@ final actor WebSocketManager: WebSocketService {
     private var webSocketTask: URLSessionWebSocketTask?
     private let url: URL
     private let session: URLSession
-    private var continuation: AsyncThrowingStream<String, Error>.Continuation?
+    private var continuations: [UUID: AsyncThrowingStream<String, Error>.Continuation] = [:]
 
     private var isConnected = false
     private var reconnectAttempts = 0
@@ -19,7 +19,6 @@ final actor WebSocketManager: WebSocketService {
     private let reconnectBaseDelay: TimeInterval = 2.0
     private let nanosecondsPerSecond: UInt64 = 1_000_000_000
     private let maxReconnectAttempts = 5
-    private var activeSubscribers = 0
 
     init(session: URLSession = .shared, url: URL = AppConfig.API.bitmexWebSocketURL) {
         self.session = session
@@ -27,7 +26,6 @@ final actor WebSocketManager: WebSocketService {
     }
 
     func connectIfNeeded() async {
-        activeSubscribers += 1
         guard !isConnected || webSocketTask?.state != .running else {
             AppLogger.socket.debug("WebSocket is already connected")
             return
@@ -38,10 +36,9 @@ final actor WebSocketManager: WebSocketService {
         isConnected = true
         reconnectAttempts = 0
         AppLogger.socket.debug("WebSocket connected to \(self.url.absoluteString)")
-
         receiveMessages()
     }
-    
+
     func send(_ message: String) async throws {
         AppLogger.socket.debug("Sending message: \(message)")
         try await webSocketTask?.send(.string(message))
@@ -50,27 +47,33 @@ final actor WebSocketManager: WebSocketService {
     func disconnect() async {
         AppLogger.socket.debug("Disconnecting WebSocket.")
         webSocketTask?.cancel(with: .goingAway, reason: nil)
+        webSocketTask = nil
         isConnected = false
-        continuation?.finish()
-        continuation = nil
-    }
-    
-    func disconnectIfUnused() async {
-        activeSubscribers -= 1
-        if activeSubscribers <= 0 {
-            await disconnect()
-        }
+        continuations.values.forEach { $0.finish() }
+        continuations.removeAll()
     }
 
     func messageStream() async -> AsyncThrowingStream<String, Error> {
-        AsyncThrowingStream { continuation in
-            self.continuation = continuation
-            AppLogger.socket.debug("Message stream subscribed.")
+        let id = UUID()
+        return AsyncThrowingStream { continuation in
+            continuations[id] = continuation
+            AppLogger.socket.debug("Message stream subscribed. ID: \(id)")
+
+            continuation.onTermination = { [weak self] _ in
+                Task {
+                    await self?.removeContinuation(for: id)
+                }
+            }
         }
     }
 }
 
 private extension WebSocketManager {
+    func removeContinuation(for id: UUID) {
+        continuations.removeValue(forKey: id)
+        AppLogger.socket.debug("Message stream removed. ID: \(id)")
+    }
+
     func receiveMessages() {
         Task {
             while true {
@@ -79,21 +82,28 @@ private extension WebSocketManager {
                         AppLogger.socket.error("WebSocket receive returned nil.")
                         return
                     }
+
+                    let text: String
                     switch message {
-                    case .string(let text):
-                        AppLogger.socket.debug("Received text: \(text)...")
-                        continuation?.yield(text)
+                    case .string(let string):
+                        text = string
                     case .data(let data):
-                        if let text = String(data: data, encoding: .utf8) {
-                            AppLogger.socket.debug("Received data: \(text.prefix(80))...")
-                            continuation?.yield(text)
-                        }
+                        text = String(data: data, encoding: .utf8) ?? ""
                     @unknown default:
-                        AppLogger.socket.error("Received unknown message format.")
+                        AppLogger.socket.error("Received unknown WebSocket message.")
+                        continue
                     }
+
+                    for continuation in continuations.values {
+                        continuation.yield(text)
+                    }
+
                 } catch {
                     AppLogger.socket.error("WebSocket received error: \(error.localizedDescription)")
-                    continuation?.finish(throwing: error)
+                    for continuation in continuations.values {
+                        continuation.finish(throwing: error)
+                    }
+                    continuations.removeAll()
                     isConnected = false
                     await reconnect()
                     break
@@ -101,20 +111,17 @@ private extension WebSocketManager {
             }
         }
     }
-    
+
     func reconnect() async {
         guard reconnectAttempts < maxReconnectAttempts else {
-            AppLogger.socket.error("Reached max reconnect attempts. Giving up.")
+            AppLogger.socket.error("Reached max reconnect attempts.")
             return
         }
 
         await disconnect()
         reconnectAttempts += 1
-
         let delay = min(pow(reconnectBaseDelay, Double(reconnectAttempts)), maxReconnectDelay)
-        
-        AppLogger.socket.debug("Attempting to reconnect in \(delay) seconds (attempt \(self.reconnectAttempts))")
-
+        AppLogger.socket.debug("Reconnecting in \(delay) seconds")
         try? await Task.sleep(nanoseconds: UInt64(delay * Double(nanosecondsPerSecond)))
         await connectIfNeeded()
     }

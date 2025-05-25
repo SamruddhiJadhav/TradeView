@@ -15,13 +15,14 @@ final class OrderBookViewModel: ObservableObject {
     
     private var orderBookDict: [UInt64: OrderBookEntry] = [:]
     private let socketService: WebSocketService
+    private var listenTask: Task<Void, Never>?
 
     init(socketService: WebSocketService) {
         self.socketService = socketService
     }
 
     func onAppear() {
-        Task {
+        listenTask = Task {
             isLoading = true
             await connectSocket()
             try? await subscribeToOrderBook()
@@ -29,7 +30,13 @@ final class OrderBookViewModel: ObservableObject {
         }
     }
     
-    func onDisappear() {}
+    func onDisappear() {
+        listenTask?.cancel()
+        listenTask = nil
+        Task {
+            try? await socketService.send(SocketMessages.orderBookUnsubscribe)
+        }
+    }
 }
 
 private extension OrderBookViewModel {
