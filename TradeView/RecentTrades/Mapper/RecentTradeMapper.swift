@@ -20,7 +20,7 @@ enum RecentTradeMapper {
         do {
             return try JSONDecoder().decode(RecentTradeUpdate.self, from: data)
         } catch {
-            AppLogger.parsing.error("❌ JSON Decoding Error: \(error)")
+            AppLogger.parsing.error("RecentTradeUpdate JSON Decoding Error: \(error)")
             return nil
         }
     }

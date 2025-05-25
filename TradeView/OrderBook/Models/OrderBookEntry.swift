@@ -10,6 +10,6 @@ import Foundation
 struct OrderBookEntry: Decodable, Identifiable {
     let id: UInt64
     let side: TradeSide
-    var size: Int
+    var size: Int?
     let price: Double
 }

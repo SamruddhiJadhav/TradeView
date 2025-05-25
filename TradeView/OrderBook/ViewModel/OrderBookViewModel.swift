@@ -80,11 +80,11 @@ private extension OrderBookViewModel {
             .prefix(20)
         
         sortedEntries.forEach { entry in
-            maxSize += entry.size
+            maxSize += entry.size ?? 0
         }
 
         return sortedEntries.map {
-            accumulatedSize += $0.size
+            accumulatedSize += $0.size ?? 0
             return OrderBookRowPresentationModel(from: $0,
                                                  accumulatedSizeRatio: Double(accumulatedSize) / Double(maxSize))
         }
