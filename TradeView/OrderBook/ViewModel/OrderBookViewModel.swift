@@ -11,12 +11,14 @@ import SwiftUI
 final class OrderBookViewModel: ObservableObject {
     @Published var buyRows: [OrderBookRowPresentationModel] = []
     @Published var sellRows: [OrderBookRowPresentationModel] = []
+    @Published var isLoading: Bool = false
 
     private var orderBookDict: [UInt64: OrderBookEntry] = [:]
     private let socketService = WebSocketManager()
 
     func onAppear() {
         Task {
+            isLoading = true
             await connectSocket()
             try? await subscribeToOrderBook()
             try? await listenForMessages()
@@ -48,6 +50,7 @@ private extension OrderBookViewModel {
             
             buyRows = buildPresentationModel(for: .buy)
             sellRows = buildPresentationModel(for: .sell)
+            isLoading = false
         }
     }
     

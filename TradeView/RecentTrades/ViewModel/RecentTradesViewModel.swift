@@ -10,11 +10,14 @@ import SwiftUI
 @MainActor
 final class RecentTradesViewModel: ObservableObject {
 
-    private let socketService = WebSocketManager()
     @Published var recentTrades = [RecentTradePresentationModel]()
+    @Published var isLoading: Bool = false
+    
+    private let socketService = WebSocketManager()
     
     func onAppear() {
         Task {
+            isLoading = true
             await connectSocket()
             try? await subscribeToOrderBook()
             try? await listenForMessages()
@@ -70,5 +73,6 @@ private extension RecentTradesViewModel {
         }
 
         self.recentTrades = Array(combined)
+        self.isLoading = false
     }
 }

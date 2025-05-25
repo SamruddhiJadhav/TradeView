@@ -50,6 +50,12 @@ struct RecentTradeView: View {
             .onDisappear {
                 viewModel.onDisappear()
             }
+            if viewModel.isLoading {
+                Spacer()
+                ProgressView()
+                    .progressViewStyle(.circular)
+                Spacer()
+            }
         }
     }
 }
