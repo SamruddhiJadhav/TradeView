@@ -53,17 +53,10 @@ struct RecentTradeView: View {
             .onDisappear {
                 viewModel.onDisappear()
             }
-
-            if viewModel.isLoading {
-                Spacer()
-                ProgressView()
-                    .progressViewStyle(.circular)
-                Spacer()
-            }
         }
     }
 }
 
 #Preview {
-    //RecentTradeView()
+    RecentTradeView(viewModel: RecentTradesViewModel(socketService: WebSocketManager()))
 }

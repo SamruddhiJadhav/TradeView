@@ -46,5 +46,9 @@ struct TradingDashboardView<RecentTradeView: View, OrderBookView: View>: View {
 }
 
 #Preview {
-    //TradingDashboardView()
+    TradingDashboardView(
+        viewModel: TradingDashboardViewModel(),
+        recentTradeView: RecentTradeView(viewModel: RecentTradesViewModel(socketService: WebSocketManager())),
+        orderBookView: OrderBookView(viewModel: OrderBookViewModel(socketService: WebSocketManager()))
+    )
 }

@@ -66,5 +66,5 @@ struct OrderBookView: View {
 }
 
 #Preview {
-    //OrderBookView()
+    OrderBookView(viewModel: OrderBookViewModel(socketService: WebSocketManager()))
 }
