@@ -7,9 +7,22 @@
 
 import SwiftUI
 
-struct TradingDashboardView: View {
+struct TradingDashboardView<RecentTradeView: View, OrderBookView: View>: View {
 
-    @StateObject var viewModel = TradingDashboardViewModel()
+    @StateObject private var viewModel: TradingDashboardViewModel
+    
+    let recentTradeView: RecentTradeView
+    let orderBookView: OrderBookView
+    
+    init(
+        viewModel: TradingDashboardViewModel,
+        recentTradeView: RecentTradeView,
+        orderBookView: OrderBookView
+    ) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+        self.recentTradeView = recentTradeView
+        self.orderBookView = orderBookView
+    }
 
     var body: some View {
         VStack {
@@ -24,14 +37,14 @@ struct TradingDashboardView: View {
             case .chart:
                 ChartView()
             case .orderBook:
-                OrderBookView()
+                orderBookView
             case .recentTrades:
-                RecentTradeView()
+                recentTradeView
             }
         }
     }
 }
 
 #Preview {
-    TradingDashboardView()
+    //TradingDashboardView()
 }

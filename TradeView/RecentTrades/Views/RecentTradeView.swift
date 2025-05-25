@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct RecentTradeView: View {
-    
-    @StateObject var viewModel = RecentTradesViewModel()
+    @StateObject private var viewModel: RecentTradesViewModel
+
+    init(viewModel: RecentTradesViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         ScrollView {
@@ -50,6 +53,7 @@ struct RecentTradeView: View {
             .onDisappear {
                 viewModel.onDisappear()
             }
+
             if viewModel.isLoading {
                 Spacer()
                 ProgressView()
@@ -61,5 +65,5 @@ struct RecentTradeView: View {
 }
 
 #Preview {
-    RecentTradeView()
+    //RecentTradeView()
 }

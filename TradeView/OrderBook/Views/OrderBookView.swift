@@ -9,7 +9,11 @@ import SwiftUI
 
 struct OrderBookView: View {
 
-    @StateObject private var viewModel = OrderBookViewModel()
+    @StateObject private var viewModel: OrderBookViewModel
+    
+    init(viewModel: OrderBookViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         ScrollView {
@@ -62,5 +66,5 @@ struct OrderBookView: View {
 }
 
 #Preview {
-    OrderBookView()
+    //OrderBookView()
 }

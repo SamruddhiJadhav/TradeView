@@ -19,15 +19,17 @@ final actor WebSocketManager: WebSocketService {
     private let reconnectBaseDelay: TimeInterval = 2.0
     private let nanosecondsPerSecond: UInt64 = 1_000_000_000
     private let maxReconnectAttempts = 5
+    private var activeSubscribers = 0
 
     init(session: URLSession = .shared, url: URL = AppConfig.API.bitmexWebSocketURL) {
         self.session = session
         self.url = url
     }
 
-    func connect() async {
-        guard !isConnected else {
-            AppLogger.socket.debug("WebSocket is aleardy connected")
+    func connectIfNeeded() async {
+        activeSubscribers += 1
+        guard !isConnected || webSocketTask?.state != .running else {
+            AppLogger.socket.debug("WebSocket is already connected")
             return
         }
 
@@ -39,7 +41,7 @@ final actor WebSocketManager: WebSocketService {
 
         receiveMessages()
     }
-
+    
     func send(_ message: String) async throws {
         AppLogger.socket.debug("Sending message: \(message)")
         try await webSocketTask?.send(.string(message))
@@ -51,6 +53,13 @@ final actor WebSocketManager: WebSocketService {
         isConnected = false
         continuation?.finish()
         continuation = nil
+    }
+    
+    func disconnectIfUnused() async {
+        activeSubscribers -= 1
+        if activeSubscribers <= 0 {
+            await disconnect()
+        }
     }
 
     func messageStream() async -> AsyncThrowingStream<String, Error> {
@@ -72,7 +81,7 @@ private extension WebSocketManager {
                     }
                     switch message {
                     case .string(let text):
-                        AppLogger.socket.debug("Received text: \(text.prefix(80))...")
+                        AppLogger.socket.debug("Received text: \(text)...")
                         continuation?.yield(text)
                     case .data(let data):
                         if let text = String(data: data, encoding: .utf8) {
@@ -85,6 +94,7 @@ private extension WebSocketManager {
                 } catch {
                     AppLogger.socket.error("WebSocket received error: \(error.localizedDescription)")
                     continuation?.finish(throwing: error)
+                    isConnected = false
                     await reconnect()
                     break
                 }
@@ -106,6 +116,6 @@ private extension WebSocketManager {
         AppLogger.socket.debug("Attempting to reconnect in \(delay) seconds (attempt \(self.reconnectAttempts))")
 
         try? await Task.sleep(nanoseconds: UInt64(delay * Double(nanosecondsPerSecond)))
-        await connect()
+        await connectIfNeeded()
     }
 }

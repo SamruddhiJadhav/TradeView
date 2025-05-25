@@ -12,9 +12,13 @@ final class OrderBookViewModel: ObservableObject {
     @Published var buyRows: [OrderBookRowPresentationModel] = []
     @Published var sellRows: [OrderBookRowPresentationModel] = []
     @Published var isLoading: Bool = false
-
+    
     private var orderBookDict: [UInt64: OrderBookEntry] = [:]
-    private let socketService = WebSocketManager()
+    private let socketService: WebSocketService
+
+    init(socketService: WebSocketService) {
+        self.socketService = socketService
+    }
 
     func onAppear() {
         Task {
@@ -25,16 +29,12 @@ final class OrderBookViewModel: ObservableObject {
         }
     }
     
-    func onDisappear() {
-        Task {
-            await socketService.disconnect()
-        }
-    }
+    func onDisappear() {}
 }
 
 private extension OrderBookViewModel {
     func connectSocket() async {
-        await socketService.connect()
+        await socketService.connectIfNeeded()
     }
     
     func subscribeToOrderBook() async throws {

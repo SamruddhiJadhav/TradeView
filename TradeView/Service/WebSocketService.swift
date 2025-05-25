@@ -8,8 +8,8 @@
 import Foundation
 
 protocol WebSocketService: AnyObject {
-    func connect() async
+    func connectIfNeeded() async
+    func disconnectIfUnused() async
     func send(_ message: String) async throws
-    func disconnect() async
     func messageStream() async -> AsyncThrowingStream<String, Error>
 }
