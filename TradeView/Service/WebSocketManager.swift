@@ -72,11 +72,11 @@ private extension WebSocketManager {
                     }
                     switch message {
                     case .string(let text):
-                        AppLogger.socket.debug("Received text: \(text)...")
+                        AppLogger.socket.debug("Received text: \(text.prefix(80))...")
                         continuation?.yield(text)
                     case .data(let data):
                         if let text = String(data: data, encoding: .utf8) {
-                            AppLogger.socket.debug("Received data: \(text)...")
+                            AppLogger.socket.debug("Received data: \(text.prefix(80))...")
                             continuation?.yield(text)
                         }
                     @unknown default:

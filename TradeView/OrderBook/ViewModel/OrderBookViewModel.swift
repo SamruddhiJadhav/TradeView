@@ -22,6 +22,12 @@ final class OrderBookViewModel: ObservableObject {
             try? await listenForMessages()
         }
     }
+    
+    func onDisappear() {
+        Task {
+            await socketService.disconnect()
+        }
+    }
 }
 
 private extension OrderBookViewModel {

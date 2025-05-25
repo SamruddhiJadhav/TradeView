@@ -20,6 +20,12 @@ final class RecentTradesViewModel: ObservableObject {
             try? await listenForMessages()
         }
     }
+    
+    func onDisappear() {
+        Task {
+            await socketService.disconnect()
+        }
+    }
 }
 
 private extension RecentTradesViewModel {

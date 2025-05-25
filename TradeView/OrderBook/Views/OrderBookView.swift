@@ -47,6 +47,9 @@ struct OrderBookView: View {
             .onAppear {
                 viewModel.onAppear()
             }
+            .onDisappear {
+                viewModel.onDisappear()
+            }
         }
     }
 }

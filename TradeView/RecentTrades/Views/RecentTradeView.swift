@@ -47,6 +47,9 @@ struct RecentTradeView: View {
             .onAppear {
                 viewModel.onAppear()
             }
+            .onDisappear {
+                viewModel.onDisappear()
+            }
         }
     }
 }
