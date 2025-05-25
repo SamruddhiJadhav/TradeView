@@ -6,7 +6,7 @@ A lightweight iOS app to view real-time Order Book and Recent Trades for the XBT
 MVVM with @ObservableObject for state management.
 WebSocketManager, A singleton actor that manages the socket connection and streams.
 Uses AsyncThrowingStream to deliver WebSocket messages in a structured way.
-Handles reconnect attempts and error logging.
+Handles error logging.
 TradeViewApp is acting as Compostion Root.
                                                                             
 ⚙️ Technologies

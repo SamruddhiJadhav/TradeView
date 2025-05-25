@@ -14,11 +14,7 @@ final actor WebSocketManager: WebSocketService {
     private var continuations: [UUID: AsyncThrowingStream<String, Error>.Continuation] = [:]
 
     private var isConnected = false
-    private var reconnectAttempts = 0
-    private let maxReconnectDelay: TimeInterval = 60
-    private let reconnectBaseDelay: TimeInterval = 2.0
-    private let nanosecondsPerSecond: UInt64 = 1_000_000_000
-    private let maxReconnectAttempts = 5
+
 
     init(session: URLSession = .shared, url: URL = AppConfig.API.bitmexWebSocketURL) {
         self.session = session
@@ -34,7 +30,6 @@ final actor WebSocketManager: WebSocketService {
         webSocketTask = session.webSocketTask(with: url)
         webSocketTask?.resume()
         isConnected = true
-        reconnectAttempts = 0
         AppLogger.socket.debug("WebSocket connected to \(self.url.absoluteString)")
         receiveMessages()
     }
@@ -105,24 +100,9 @@ private extension WebSocketManager {
                     }
                     continuations.removeAll()
                     isConnected = false
-                    await reconnect()
                     break
                 }
             }
         }
-    }
-
-    func reconnect() async {
-        guard reconnectAttempts < maxReconnectAttempts else {
-            AppLogger.socket.error("Reached max reconnect attempts.")
-            return
-        }
-
-        await disconnect()
-        reconnectAttempts += 1
-        let delay = min(pow(reconnectBaseDelay, Double(reconnectAttempts)), maxReconnectDelay)
-        AppLogger.socket.debug("Reconnecting in \(delay) seconds")
-        try? await Task.sleep(nanoseconds: UInt64(delay * Double(nanosecondsPerSecond)))
-        await connectIfNeeded()
     }
 }
