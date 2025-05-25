@@ -4,9 +4,10 @@ A lightweight iOS app to view real-time Order Book and Recent Trades for the XBT
 
 🧱 Architecture
 MVVM with @ObservableObject for state management.
-WebSocketManager: A singleton actor that manages the socket connection and streams.
+WebSocketManager, A singleton actor that manages the socket connection and streams.
 Uses AsyncThrowingStream to deliver WebSocket messages in a structured way.
 Handles reconnect attempts and error logging.
+TradeViewApp is acting as Compostion Root.
                                                                             
 ⚙️ Technologies
 ✅ Swift Concurrency (async/await)
@@ -14,21 +15,14 @@ Handles reconnect attempts and error logging.
 ✅ SwiftUI + MVVM
 ✅ Custom WebSocketManager
 ✅ Modular, testable code
-                                                                            
-📲 Screens
-Order Book          Recent Trades
-Live asks & bids    Streaming trades list
-                                                                            
-🔁 Known Trade-Offs / Simplifications
-The app does not cancel the message stream when the user navigates away from a screen (e.g., Order Book or Recent Trades).
-In a production app, we would cancel the listener Task in onDisappear() to reduce memory use and avoid redundant processing.
-For this demo, keeping the stream active simplifies the socket lifecycle without introducing stale reconnect issues.
-Socket disconnect/reconnect is kept minimal for brevity and to keep the focus on core functionality.
-                                                                            
+
                                                                             
 ✅ Possible Improvements (if extended further)
-Graceful handling of stream cancellation per feature (Order Book vs Trades)
-Add user-selectable pairs (BTC/USD, ETH/USD, etc.)
-Combine with persistence for offline viewing
-Real-time charts
-Unit tests for mappers and socket handling
+
+Unit tests for mappers and socket handling.
+Add Fonts and Spacing to Theme.
+Currently logs are added for errors, we can handle errors and show user the errors.
+In doc, I see that Qty is decimal four digits after the decimal point, but API returns Int, so showing Int Instead.
+In Recent Trades we can show some message or ProgressView when schreen is emty and waiting for messages.
+Combine with persistence for offline viewing.
+Real-time charts.

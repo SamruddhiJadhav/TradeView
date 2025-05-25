@@ -34,7 +34,7 @@ struct RecentTradePresentationModel: Identifiable {
 extension RecentTradePresentationModel {
     var formattedTime: String {
         guard let date = TradeDateFormatter.isoFormatter.date(from: timestamp) else {
-            return "Invalid"
+            return ""
         }
         return TradeDateFormatter.timeFormatter24Hr.string(from: date)
     }
