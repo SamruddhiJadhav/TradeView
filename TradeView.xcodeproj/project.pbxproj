@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		885CA90E2DE356CD00969030 /* Read.md in Sources */ = {isa = PBXBuildFile; fileRef = 885CA90D2DE356CA00969030 /* Read.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		885CA74D2DDB173B00969030 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		885CA73C2DDB173900969030 /* TradeView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TradeView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		885CA74C2DDB173B00969030 /* TradeViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TradeViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		885CA7562DDB173B00969030 /* TradeViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TradeViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		885CA90D2DE356CA00969030 /* Read.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Read.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		885CA7332DDB173900969030 = {
 			isa = PBXGroup;
 			children = (
+				885CA90D2DE356CA00969030 /* Read.md */,
 				885CA73E2DDB173900969030 /* TradeView */,
 				885CA74F2DDB173B00969030 /* TradeViewTests */,
 				885CA7592DDB173B00969030 /* TradeViewUITests */,
@@ -236,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				885CA90E2DE356CD00969030 /* Read.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
