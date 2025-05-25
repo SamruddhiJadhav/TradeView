@@ -28,12 +28,21 @@ struct RecentTradeRow: View {
         }
         .padding(12)
         .background {
-            recentTrade.side == .buy ? Theme.Colors.backgroundGreen : Theme.Colors.backgroundRed
+            recentTrade.isHighlighted ? (recentTrade.side == .buy ? Theme.Colors.backgroundGreen : Theme.Colors.backgroundRed) : .clear
         }
         .animation(.easeInOut(duration: 0.2), value: recentTrade.isHighlighted)
     }
 }
 
 #Preview {
-    RecentTradeRow(recentTrade: RecentTradePresentationModel(id: "1", price: 12.9, timestamp: "2025-05-21T09:30:06.154Z", quantity: 23, side: .buy))
+    RecentTradeRow(recentTrade:
+                    RecentTradePresentationModel(
+                        id: "1",
+                        price: 12.9,
+                        timestamp: "2025-05-21T09:30:06.154Z",
+                        quantity: 23,
+                        side: .buy,
+                        isHighlighted: false
+                    )
+    )
 }

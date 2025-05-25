@@ -52,13 +52,23 @@ private extension RecentTradesViewModel {
                 price: entry.price,
                 timestamp: entry.timestamp,
                 quantity: entry.size,
-                side: entry.side
+                side: entry.side,
+                isHighlighted: true
             )
         }
 
         let combined = (newTrades + self.recentTrades)
             .sorted(by: { $0.timestamp > $1.timestamp })
             .prefix(30)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
+            self.recentTrades = self.recentTrades.map {
+                var model = $0
+                model.isHighlighted = false
+                return model
+            }
+        }
+
         self.recentTrades = Array(combined)
     }
 }

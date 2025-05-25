@@ -12,14 +12,22 @@ struct RecentTradePresentationModel: Identifiable {
     let timestamp: String
     let quantity: Int
     let side: TradeSide
-    var isHighlighted: Bool = false
+    var isHighlighted: Bool
     
-    init(id: String, price: Double, timestamp: String, quantity: Int, side: TradeSide) {
+    init(
+        id: String,
+        price: Double,
+        timestamp: String,
+        quantity: Int,
+        side: TradeSide,
+        isHighlighted: Bool
+    ) {
         self.price = price
         self.timestamp = timestamp
         self.quantity = quantity
         self.id = id
         self.side = side
+        self.isHighlighted = isHighlighted
     }
 }
 
