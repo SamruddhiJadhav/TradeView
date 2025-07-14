@@ -22,7 +22,6 @@ TradeViewApp is acting as Compostion Root.
 Unit tests for mappers and socket handling.
 Add Fonts and Spacing to Theme.
 Currently logs are added for errors, we can handle errors and show user the errors.
-In doc, I see that Qty is decimal four digits after the decimal point, but API returns Int, so showing Int Instead.
-In Recent Trades we can show some message or ProgressView when schreen is emty and waiting for messages.
+In Recent Trades we can show some message or ProgressView when screen is empty and waiting for messages.
 Combine with persistence for offline viewing.
 Real-time charts.
