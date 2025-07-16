@@ -5,6 +5,7 @@ Handles error logging.
 TradeViewApp is acting as Compostion Root.
 
 ⚙️ Technologies 
+
 ✅ Swift Concurrency (async/await) 
 ✅ URLSession WebSocket ✅ SwiftUI + MVVM 
 ✅ Custom WebSocketManager 
